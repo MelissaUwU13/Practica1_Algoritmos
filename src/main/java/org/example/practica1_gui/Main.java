@@ -5,7 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -27,6 +27,8 @@ public class Main extends Application {
         btnJugar.getStyleClass().add("boton-jugar");
         btnSalir.getStyleClass().add("boton-salir");
 
+
+
         btnSalir.setOnAction(e -> stage.close());
 
         btnJugar.setOnAction(e -> {
@@ -34,12 +36,14 @@ public class Main extends Application {
             juego.mostrar(stage);
         });
 
-        VBox menu = new VBox(20, btnJugar, btnSalir);
+        HBox menu = new HBox(20, btnJugar, btnSalir);
         menu.setAlignment(Pos.CENTER);
 
         StackPane root = new StackPane(fondo, menu);
 
+
         Scene scene = new Scene(root, 1024, 500);
+        scene.getStylesheets().add("/estilo.css");
 
         stage.setTitle("Solitario");
         stage.setScene(scene);
