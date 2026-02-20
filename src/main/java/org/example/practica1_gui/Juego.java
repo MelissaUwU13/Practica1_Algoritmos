@@ -2,6 +2,7 @@ package org.example.practica1_gui;
 
 import DeckOfCards.Carta;
 import DeckOfCards.CartaInglesa;
+import Solitaire.FoundationDeck;
 import Solitaire.TableauDeck;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,16 +14,23 @@ import Solitaire.SolitaireGame;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
+import java.util.ArrayList;
+
 public class Juego {
     private SolitaireGame juego;
     private HBox columnas;
     private VBox columnas1;
+    private int columnaSeleccionada = -1;
+    private ArrayList<ImageView> basesVisuales = new ArrayList<>();
+    private ImageView descarteVisual;
+    private ImageView mazoVisual;
+    private boolean modoWasteATableau = false;
 
     public void mostrar(Stage stage) {
 
         juego = new SolitaireGame();
         columnas = new HBox(40);
-        columnas.setTranslateY(100); // bajarlas un poco
+        columnas.setTranslateY(100);
 
         columnas1 = new VBox(20);
         columnas1.setTranslateY(100);
@@ -35,10 +43,10 @@ public class Juego {
 
         //Botones
         Button btnMoverPilaBase = new Button("MOVER PILA A BASE");
-        Button btnDibujar = new Button("DIBUJAR CARTA");
-        Button btnRecargar = new Button("RECARGAR PILA");
+        Button btnDibujar = new Button("DIBUJAR");
+        Button btnRecargar = new Button("RECARGAR");
         Button btnMoverCartaBase = new Button("MOVER CARTA A BASE");
-        Button btnMoverCartaCarta = new Button("MOVER CARTA A OTRA CARTA");
+        Button btnMoverCartaCarta = new Button("MOVER CARTA A CARTA");
         Button btnMoverPilaCarta = new Button("MOVER PILA A CARTA");
         Button btnSalir = new Button("SALIR");
 
@@ -65,6 +73,27 @@ public class Juego {
             actualizarVista();
         });
 
+        btnMoverCartaBase.setOnAction(e -> {
+            if (columnaSeleccionada != -1) {
+                juego.moveTableauToFoundation(columnaSeleccionada);
+                columnaSeleccionada = -1;
+                actualizarVista();
+            }
+        });
+
+        btnMoverCartaCarta.setOnAction(e -> {
+            if (columnaSeleccionada != -1) {
+                juego.moveWasteToTableau(columnaSeleccionada);
+                columnaSeleccionada = -1;
+                actualizarVista();
+            }
+        });
+
+        btnMoverPilaCarta.setOnAction(e -> {
+            modoWasteATableau = true;
+            columnaSeleccionada = -1;
+        });
+
         btnSalir.setOnAction(e -> stage.close());
 
 
@@ -75,13 +104,13 @@ public class Juego {
         Image imgVacio = new Image(getClass().getResourceAsStream("/Cartas/vacio.png"));
         Image Reverso = new Image(getClass().getResourceAsStream("/Cartas/reverso.png"));
 
-        ImageView espacioMazo = new ImageView(Reverso);
-        espacioMazo.setFitWidth(50);
-        espacioMazo.setPreserveRatio(true);
+        mazoVisual = new ImageView(Reverso);
+        mazoVisual.setFitWidth(50);
+        mazoVisual.setPreserveRatio(true);
 
-        ImageView descarte = new ImageView(imgVacio);
-        descarte.setFitWidth(50);
-        descarte.setPreserveRatio(true);
+        descarteVisual = new ImageView(imgVacio);
+        descarteVisual.setFitWidth(50);
+        descarteVisual.setPreserveRatio(true);
 
         HBox bases = new HBox(20);
         bases.setAlignment(Pos.CENTER);
@@ -90,14 +119,15 @@ public class Juego {
             ImageView base = new ImageView(imgVacio);
             base.setFitWidth(50);
             base.setPreserveRatio(true);
+
+            basesVisuales.add(base); // ← GUARDAMOS REFERENCIA
             bases.getChildren().add(base);
         }
-
 
         HBox zonaSuperior = new HBox(40);
         zonaSuperior.setAlignment(Pos.CENTER);
 
-        zonaSuperior.getChildren().addAll(espacioMazo, descarte, bases);
+        zonaSuperior.getChildren().addAll(mazoVisual, descarteVisual, bases);
 
         BorderPane tablero = new BorderPane();
 
@@ -126,33 +156,82 @@ public class Juego {
 
         for (int i = 0; i < 7; i++) {
 
+            final int indiceColumna = i + 1;
             VBox col = new VBox(-45);
+
+            col.setOnMouseClicked(e -> {
+                manejarClickColumna(indiceColumna);
+            });
 
             TableauDeck colLogica = juego.getTableau().get(i);
 
-            for (CartaInglesa carta : colLogica.getCards()) {
+            if (colLogica.isEmpty()) {
 
-                ImageView cartaView = new ImageView(obtenerImagenCarta(carta));
-                cartaView.setFitWidth(50);
-                cartaView.setPreserveRatio(true);
+                Image vacio = new Image(getClass().getResourceAsStream("/Cartas/vacio.png"));
+                ImageView espacio = new ImageView(vacio);
+                espacio.setFitWidth(50);
+                espacio.setPreserveRatio(true);
 
-                col.getChildren().add(cartaView);
+                col.getChildren().add(espacio);
+
+            } else {
+
+                for (CartaInglesa carta : colLogica.getCards()) {
+                    CartaGUI cartaGUI = new CartaGUI(carta);
+                    col.getChildren().add(cartaGUI.getImageView());
+                }
             }
 
             columnas.getChildren().add(col);
             columnas.setAlignment(Pos.CENTER);
         }
-    }
 
-    private Image obtenerImagenCarta(Carta carta) {
-        String nombreArchivo;
+        for (int i = 0; i < basesVisuales.size(); i++) {
 
-        if (!carta.isFaceup()) {
-            nombreArchivo = "reverso.png";
-        } else {
-            nombreArchivo = carta.getValor() + "_" + carta.getPalo().name() + ".png";
+            FoundationDeck foundation = juego.getLastFoundationUpdated();
+
+            if (foundation != null && !foundation.estaVacio()) {
+                CartaInglesa ultima = foundation.getUltimaCarta();
+                CartaGUI cartaGUI = new CartaGUI(ultima);
+                basesVisuales.get(ultima.getPalo().ordinal()).setImage(cartaGUI.getImageView().getImage());
+            }
         }
 
-        return new Image(getClass().getResourceAsStream("/Cartas/" + nombreArchivo));
+        CartaInglesa cartaWaste = juego.getWastePile().verCarta();
+
+        if (cartaWaste != null) {
+            CartaGUI cartaGUI = new CartaGUI(cartaWaste);
+            descarteVisual.setImage(cartaGUI.getImageView().getImage());
+        } else {
+            descarteVisual.setImage(new Image(getClass().getResourceAsStream("/Cartas/vacio.png")));
+        }
+
+        if (juego.getDrawPile().hayCartas()) {
+            mazoVisual.setImage(new Image(getClass().getResourceAsStream("/Cartas/reverso.png")));
+        } else {
+            mazoVisual.setImage(new Image(getClass().getResourceAsStream("/Cartas/vacio.png")));
+        }
+    }
+
+    private void manejarClickColumna(int columna) {
+
+        if (modoWasteATableau) {
+
+            boolean movido = juego.moveWasteToTableau(columna);
+
+            modoWasteATableau = false;
+            actualizarVista();
+            return;
+        }
+
+        if (columnaSeleccionada == -1) {
+            columnaSeleccionada = columna;
+        }
+        else {
+            boolean movido = juego.moveTableauToTableau(columnaSeleccionada, columna);
+
+            columnaSeleccionada = -1;
+            actualizarVista();
+        }
     }
 }
