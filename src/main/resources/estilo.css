@@ -4,14 +4,14 @@ Button { -fx-background-color: #a11e1e;
     -fx-text-fill: #FFFFFF;
     -fx-font-family: "Times New Roman";
     -fx-font-style: italic;
-    -fx-font-size: 20px;
+    -fx-font-size: 15px;
     -fx-background-radius: 10 10 10 10;
     -fx-border-radius: 10 10 10 10;
 }
 
 
 Button:hover { -fx-background-color: #333333;
-    -fx-font-size: 22px;
+    -fx-font-size: 15px;
 }
 
 Button:pressed { -fx-background-color: #FFFFFF;
@@ -19,3 +19,6 @@ Button:pressed { -fx-background-color: #FFFFFF;
     -fx-font-weight: bold;
 }
 
+.root {
+    -fx-background-color: linear-gradient(to bottom, #0f8c3a, #065a24);
+}

@@ -1,4 +1,4 @@
-package Solitaire.DeckOfCards;
+package DeckOfCards;
 /**
  * Palos de cartas de una baraja inglesa.
  *

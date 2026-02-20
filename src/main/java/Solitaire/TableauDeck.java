@@ -1,4 +1,4 @@
-package Solitaire.solitaire;
+package Solitaire;
 
 import DeckOfCards.CartaInglesa;
 

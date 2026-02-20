@@ -1,4 +1,4 @@
-package Solitaire.DeckOfCards;
+package DeckOfCards;
 
 /**
  * Write a description of class Carta here.

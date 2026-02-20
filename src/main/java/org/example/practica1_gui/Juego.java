@@ -1,15 +1,17 @@
 package org.example.practica1_gui;
 
-import Solitaire.DeckOfCards.Carta;
+import DeckOfCards.Carta;
+import DeckOfCards.CartaInglesa;
+import Solitaire.TableauDeck;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import Solitaire.solitaire.SolitaireGame;
+import Solitaire.SolitaireGame;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 
 public class Juego {
     private SolitaireGame juego;
@@ -19,7 +21,7 @@ public class Juego {
     public void mostrar(Stage stage) {
 
         juego = new SolitaireGame();
-        columnas = new HBox(20);
+        columnas = new HBox(40);
         columnas.setTranslateY(100); // bajarlas un poco
 
         columnas1 = new VBox(20);
@@ -67,16 +69,49 @@ public class Juego {
 
 
         HBox opciones = new HBox(20, btnMoverPilaBase, btnDibujar, btnRecargar, btnMoverCartaBase, btnMoverCartaCarta, btnMoverPilaCarta, btnSalir);
-
-        HBox columnas = new HBox(20);
-        VBox columna1 = new VBox(-60);
+        opciones.setAlignment(Pos.BOTTOM_CENTER);
 
 
+        Image imgVacio = new Image(getClass().getResourceAsStream("/Cartas/vacio.png"));
+        Image Reverso = new Image(getClass().getResourceAsStream("/Cartas/reverso.png"));
 
+        ImageView espacioMazo = new ImageView(Reverso);
+        espacioMazo.setFitWidth(50);
+        espacioMazo.setPreserveRatio(true);
+
+        ImageView descarte = new ImageView(imgVacio);
+        descarte.setFitWidth(50);
+        descarte.setPreserveRatio(true);
+
+        HBox bases = new HBox(20);
+        bases.setAlignment(Pos.CENTER);
+
+        for(int i = 0; i < 4; i++){
+            ImageView base = new ImageView(imgVacio);
+            base.setFitWidth(50);
+            base.setPreserveRatio(true);
+            bases.getChildren().add(base);
+        }
+
+
+        HBox zonaSuperior = new HBox(40);
+        zonaSuperior.setAlignment(Pos.CENTER);
+
+        zonaSuperior.getChildren().addAll(espacioMazo, descarte, bases);
+
+        BorderPane tablero = new BorderPane();
+
+        tablero.setTop(zonaSuperior);
+        tablero.setCenter(columnas);
+        tablero.setBottom(opciones);
+
+        BorderPane.setAlignment(opciones, Pos.CENTER);
+        BorderPane.setMargin(opciones, new Insets(20));
 
         StackPane root = new StackPane();
-        root.getChildren().addAll(fondo, columnas, opciones);
+        root.getChildren().addAll(fondo, tablero);
 
+        actualizarVista();
 
         Scene escenaJuego = new Scene(root, 1200, 599);
         escenaJuego.getStylesheets().add("/estilo.css");
@@ -85,23 +120,39 @@ public class Juego {
         stage.setScene(escenaJuego);
     }
 
-    private Image obtenerImagenCarta(Carta carta) {
+    private void actualizarVista() {
 
-        if (!carta.isFaceup()) {
-            return new Image(getClass()
-                    .getResource("/cartas/reverso.png")
-                    .toExternalForm());
+        columnas.getChildren().clear();
+
+        for (int i = 0; i < 7; i++) {
+
+            VBox col = new VBox(-45);
+
+            TableauDeck colLogica = juego.getTableau().get(i);
+
+            for (CartaInglesa carta : colLogica.getCards()) {
+
+                ImageView cartaView = new ImageView(obtenerImagenCarta(carta));
+                cartaView.setFitWidth(50);
+                cartaView.setPreserveRatio(true);
+
+                col.getChildren().add(cartaView);
+            }
+
+            columnas.getChildren().add(col);
+            columnas.setAlignment(Pos.CENTER);
         }
-
-        String nombreArchivo = carta.getValor() + "_" + carta.getPalo().name() + ".png";
-
-        return new Image(getClass()
-                .getResource("/cartas/" + nombreArchivo)
-                .toExternalForm());
     }
 
-    private void actualizarVista() {
-        // borrar cartas actuales
-        // volver a dibujar según estado actual del juego
+    private Image obtenerImagenCarta(Carta carta) {
+        String nombreArchivo;
+
+        if (!carta.isFaceup()) {
+            nombreArchivo = "reverso.png";
+        } else {
+            nombreArchivo = carta.getValor() + "_" + carta.getPalo().name() + ".png";
+        }
+
+        return new Image(getClass().getResourceAsStream("/Cartas/" + nombreArchivo));
     }
 }
