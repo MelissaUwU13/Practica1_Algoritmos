@@ -37,7 +37,7 @@ public class Main extends Application {
         });
 
         HBox menu = new HBox(20, btnJugar, btnSalir);
-        menu.setAlignment(Pos.CENTER);
+        menu.setAlignment(Pos.BOTTOM_CENTER);
 
         StackPane root = new StackPane(fondo, menu);
 

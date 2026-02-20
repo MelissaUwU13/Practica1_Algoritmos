@@ -1,4 +1,4 @@
-package DeckOfCards;
+package Solitaire.DeckOfCards;
 /**
  * Write a description of class Mazo here.
  *

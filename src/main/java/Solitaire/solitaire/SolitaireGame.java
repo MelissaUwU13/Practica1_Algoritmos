@@ -1,4 +1,4 @@
-package solitaire;
+package Solitaire.solitaire;
 
 import DeckOfCards.CartaInglesa;
 import DeckOfCards.Palo;
@@ -256,6 +256,5 @@ public class SolitaireGame {
         str.append(drawPile);
         return str.toString();
     }
-
 
 }
