@@ -1,5 +1,6 @@
 package org.example.practica1_gui;
 
+import Solitaire.SolitaireGame;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,8 +34,9 @@ public class Main extends Application {
 
         //Este boton nos manda a otro Stage de la clase Juego y cambia de ventana
         btnJugar.setOnAction(e -> {
-            Juego juego = new Juego();
-            juego.mostrar(stage);
+            SolitaireGame modelo = new SolitaireGame();
+            JuegoGUI vista = new JuegoGUI(stage);
+            new JuegoControlador(modelo, vista);
         });
 
         //guardamos los botones en un hbox y lo centramos

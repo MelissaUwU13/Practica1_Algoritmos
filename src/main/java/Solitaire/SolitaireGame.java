@@ -227,6 +227,10 @@ public class SolitaireGame {
         return wastePile;
     }
 
+    public ArrayList<FoundationDeck> getFoundations() {
+        return foundation;
+    }
+
     public FoundationDeck getLastFoundationUpdated() {
         return lastFoundationUpdated;
     }

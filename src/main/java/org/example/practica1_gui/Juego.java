@@ -50,6 +50,7 @@ public class Juego {
         Button btnMoverCartaBase = new Button("MOVER CARTA A BASE");
         Button btnMoverCartaCarta = new Button("MOVER CARTA A CARTA");
         Button btnMoverPilaCarta = new Button("MOVER PILA A CARTA");
+        Button btnRegresar = new Button("REGRESAR");
         Button btnSalir = new Button("SALIR");
 
         btnMoverPilaBase.getStyleClass().add("boton-moverpilabase");
@@ -58,6 +59,7 @@ public class Juego {
         btnMoverCartaBase.getStyleClass().add("boton-movercartabase");
         btnMoverCartaCarta.getStyleClass().add("boton-movercartacarta");
         btnMoverPilaCarta.getStyleClass().add("boton-moverpilacarta");
+        btnRegresar.getStyleClass().add("boton-regresar");
         btnSalir.getStyleClass().add("boton-salir");
 
         //Le damos eventos a los botones, los cuales los tomamos de la clase SolitarieGame
