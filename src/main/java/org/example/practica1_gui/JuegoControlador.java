@@ -21,7 +21,6 @@ public class JuegoControlador {
 
 
     public void clickColumna(int columna) {
-
         // Si el waste está seleccionado → mover waste a tableau
         if (wasteSeleccionado) {
             juego.moveWasteToTableau(columna);
