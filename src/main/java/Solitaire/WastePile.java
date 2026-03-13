@@ -82,4 +82,16 @@ public class WastePile {
         //si la pila no esta vacia entonces si hay cartas
         return !cartas.pilaVacia();
     }
+
+    public WastePile clonar(){
+        WastePile copia = new WastePile();
+        copia.cartas = new Pila<>();
+
+        for(int i = 0; i <= this.cartas.getTope(); i++){
+            CartaInglesa carta = (CartaInglesa) this.cartas.getPila()[i];
+            copia.cartas.push(carta);
+        }
+
+        return copia;
+    }
 }

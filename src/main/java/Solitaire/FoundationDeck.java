@@ -106,4 +106,20 @@ public class FoundationDeck {
         }
         return ultimaCarta;
     }
+
+
+    public FoundationDeck clonar(){
+
+        FoundationDeck copia = new FoundationDeck(this.palo);
+
+        copia.cartas = new Pila<>();
+
+        for(int i = 0; i <= this.cartas.getTope(); i++){
+            CartaInglesa carta = (CartaInglesa) this.cartas.getPila()[i];
+            copia.cartas.push(carta);
+        }
+
+        return copia;
+    }
 }
+

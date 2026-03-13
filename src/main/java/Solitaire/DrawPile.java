@@ -137,4 +137,19 @@ public class DrawPile {
         }
         return "@";
     }
+
+    public DrawPile clonar(){
+        DrawPile copia = new DrawPile();
+
+        copia.cartas = new Pila<>();
+
+        for(int i = 0; i <= this.cartas.getTope(); i++){
+            CartaInglesa carta = (CartaInglesa) this.cartas.getPila()[i];
+            copia.cartas.push(carta);
+        }
+
+        copia.cuantasCartasSeEntregan = this.cuantasCartasSeEntregan;
+
+        return copia;
+    }
 }

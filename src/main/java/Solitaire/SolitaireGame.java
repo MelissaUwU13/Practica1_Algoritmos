@@ -25,6 +25,8 @@ public class SolitaireGame {
         wastePile.addCartas(drawPile.retirarCartas());
     }
 
+
+
     /**
      * Move cards from Waste pile to Draw Pile.
      */
@@ -215,6 +217,14 @@ public class SolitaireGame {
         }
     }
 
+    public void setDrawPile(DrawPile drawPile) {
+        this.drawPile = drawPile;
+    }
+
+    public void setWastePile(WastePile wastePile) {
+        this.wastePile = wastePile;
+    }
+
     public DrawPile getDrawPile() {
         return drawPile;
     }
@@ -261,4 +271,23 @@ public class SolitaireGame {
         return str.toString();
     }
 
+    public SolitaireGame clonarJuego() {
+
+        SolitaireGame copia = new SolitaireGame();
+
+        copia.tableau = new ArrayList<>();
+        for (TableauDeck t : this.tableau) {
+            copia.tableau.add(t.clonar());
+        }
+
+        copia.foundation = new ArrayList<>();
+        for (FoundationDeck f : this.foundation) {
+            copia.foundation.add(f.clonar());
+        }
+
+        copia.drawPile = this.drawPile.clonar();
+        copia.wastePile = this.wastePile.clonar();
+
+        return copia;
+    }
 }

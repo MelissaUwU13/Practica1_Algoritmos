@@ -40,9 +40,17 @@ public class Pila<T> {
 
     //POP Y PUSH
 
-    //modificarlo a mi version!!!
-    public T pop(){ return (pilaVacia()?null:pila[tope--]);}
-
+    public T pop() {
+        T dato = null;
+        if (pilaVacia()){
+            System.out.println("La pila esta vacia");
+        }
+        else{
+            dato = pila[tope];
+            tope--;
+        }
+        return dato;
+    }
 
     public void push(T dato){
         if(pilaLlena()){
@@ -53,4 +61,18 @@ public class Pila<T> {
             pila[tope]=dato; //agregamos el dato T a nuestro arreglo
         }
     }
+
+    //nos regresa el ultimo valor sin borrarlo
+    public T peek() {
+        T dato = null;
+        if (pilaVacia()){
+            System.out.println("La pila esta vacia");
+        }
+        else{
+            dato = pila[tope];
+        }
+        return dato;
+    }
+
+
 }

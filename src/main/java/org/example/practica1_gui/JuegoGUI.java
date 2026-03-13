@@ -7,6 +7,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class JuegoGUI {
@@ -39,6 +42,18 @@ public class JuegoGUI {
         columnas = new HBox(40);
         columnas.setAlignment(Pos.CENTER);
 
+        Button undoButton = new Button("UNDO");
+        undoButton.getStyleClass().add("boton-undo");
+
+        undoButton.setOnAction(e -> {
+            System.out.println("UNDO");
+            controlador.undo();
+        });
+
+        undoButton.setAlignment(Pos.CENTER);
+
+
+
         for (int i = 0; i < 7; i++) {
             ColumnaGUI colGUI = new ColumnaGUI(i + 1, controlador);
             columnasGUI.add(colGUI);
@@ -50,9 +65,10 @@ public class JuegoGUI {
 
         HBox zonaSuperior = new HBox(40,
                 mazoGUI.getContenedor(),
-                basesGUI.getContenedor());
+                basesGUI.getContenedor(),
+                undoButton);
 
-        zonaSuperior.setAlignment(Pos.CENTER);
+        zonaSuperior.setAlignment(Pos.BOTTOM_CENTER);
 
         BorderPane tablero = new BorderPane();
         tablero.setTop(zonaSuperior);
@@ -63,6 +79,7 @@ public class JuegoGUI {
 
 
         Scene scene = new Scene(root, 1200, 600);
+        scene.getStylesheets().add("/estilo.css");
 
         stage.setTitle("Solitario");
         stage.setScene(scene);
