@@ -214,7 +214,7 @@ public class TableauDeck {
         copia.cartas = new ArrayList<>();
 
         for(CartaInglesa carta : this.cartas){
-            copia.cartas.add(carta);
+            copia.cartas.add(carta.clonar());
         }
 
         return copia;
