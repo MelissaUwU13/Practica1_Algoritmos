@@ -5,7 +5,7 @@ public class Pila<T> {
     private T[] pila;
 
     public Pila() {
-        pila = (T[]) new Object[10];
+        pila = (T[]) new Object[1000];
         tope = -1;
     }
 
@@ -34,7 +34,7 @@ public class Pila<T> {
     }
 
     public boolean pilaLlena(){
-        return pila.length == tope; //si tanto el tamaño del arreglo y tope son iguales, entonces esta llena
+        return tope == pila.length -1; //si tanto el tamaño del arreglo y tope son iguales, entonces esta llena
     }
 
 

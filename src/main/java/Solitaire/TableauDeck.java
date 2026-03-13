@@ -1,6 +1,7 @@
 package Solitaire;
 
 import DeckOfCards.CartaInglesa;
+import org.example.practica1_gui.Pila;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,19 +35,30 @@ public class TableauDeck {
      * @return removed cards or empty ArrayList if it is not possible to remove.
      */
     public ArrayList<CartaInglesa> removeStartingAt(int value) {
+
         ArrayList<CartaInglesa> removed = new ArrayList<>();
-        Iterator<CartaInglesa> iterator = cartas.iterator();
-        while (iterator.hasNext()) {
-            CartaInglesa next = iterator.next();
-            if (next.isFaceup()) {
-                if (next.getValor() <= value) {
-                    removed.add(next);
-                    iterator.remove();
-                }
-            }
+        // creamos una pila temporal
+        Pila<CartaInglesa> temp = new Pila<>();
+
+        // mientras haya cartas y la última cumpla la condición
+        while (!cartas.isEmpty() &&
+                cartas.getLast().isFaceup() &&
+                cartas.getLast().getValor() <= value) {
+
+            CartaInglesa ultima = cartas.getLast();
+            temp.push(ultima);
+            cartas.removeLast();
         }
+
+        // restaurar el orden correcto
+        while (!temp.pilaVacia()) {
+            removed.add(temp.pop());
+        }
+
         return removed;
     }
+
+
 
     public CartaInglesa viewCardStartingAt(int value) {
         CartaInglesa cartaConElValorDeseado = null;

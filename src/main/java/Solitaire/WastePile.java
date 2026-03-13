@@ -1,8 +1,9 @@
 package Solitaire;
 
 import DeckOfCards.CartaInglesa;
-
+import org.example.practica1_gui.Pila;
 import java.util.ArrayList;
+
 /**
  * Modela el montículo donde se colocan las cartas
  * que se extraen de Draw pile.
@@ -11,22 +12,29 @@ import java.util.ArrayList;
  * @version (2025-2)
  */
 public class WastePile {
-    private ArrayList<CartaInglesa> cartas;
+    private Pila<CartaInglesa> cartas;
 
     public WastePile() {
-        cartas = new ArrayList<>();
+        cartas = new Pila<>();
     }
 
+    //un for para revisar todas las cartas y agregarlas una por una
     public void addCartas(ArrayList<CartaInglesa> nuevas) {
-        cartas.addAll(nuevas);
+        for(CartaInglesa c : nuevas){
+            cartas.push(c);
+        }
     }
 
     public ArrayList<CartaInglesa> emptyPile() {
+
         ArrayList<CartaInglesa> pile = new ArrayList<>();
-        if (!cartas.isEmpty()) {
-            pile.addAll(cartas);
-            cartas = new ArrayList<>();
+
+        //mientras la pila de cartas no este vacia iremos sacando cartas y agregandola a pile
+        //agregamos un index, para que inserte al inicio del arrayList para conservar el orden original
+        while(!cartas.pilaVacia()){
+            pile.add(0, cartas.pop());
         }
+
         return pile;
     }
 
@@ -35,27 +43,35 @@ public class WastePile {
      * @return Carta que está encima. Si está vacía, es null.
      */
     public CartaInglesa verCarta() {
+
         CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.getLast();
+
+        //si la pila de cartas no esta vacia, entonces nos permite ver la ultima del tope
+        if (!cartas.pilaVacia()) {
+            regresar = (CartaInglesa) cartas.getPila()[cartas.getTope()];
         }
+
         return regresar;
     }
+
     public CartaInglesa getCarta() {
-        CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.removeLast();
+
+        //si la pila no esta vacia,nos regresa la ultima carta
+        if (!cartas.pilaVacia()) {
+            return cartas.pop();
         }
-        return regresar;
+
+        return null;
     }
 
     @Override
     public String toString() {
         StringBuilder stb = new StringBuilder();
-        if (cartas.isEmpty()) {
+        if (cartas.pilaVacia()) {
             stb.append("---");
         } else {
-            CartaInglesa regresar = cartas.getLast();
+            //obtenemos la ultima carta de la pila
+            CartaInglesa regresar = (CartaInglesa) cartas.getPila()[cartas.getTope()];
             regresar.makeFaceUp();
             stb.append(regresar.toString());
         }
@@ -63,6 +79,7 @@ public class WastePile {
     }
 
     public boolean hayCartas() {
-        return !cartas.isEmpty();
+        //si la pila no esta vacia entonces si hay cartas
+        return !cartas.pilaVacia();
     }
 }
